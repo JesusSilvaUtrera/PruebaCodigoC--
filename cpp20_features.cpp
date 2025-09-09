@@ -1,3 +1,7 @@
+// To compile and run this file, use the following commands:
+// g++ -std=c++20 -o cpp20_features cpp20_features.cpp
+// ./cpp20_features
+
 #include <iostream>
 #include <vector>
 #include <ranges>
@@ -28,9 +32,17 @@ void demonstrate_ranges() {
     }
     std::cout << std::endl;
 
-    // 'views::filter' creates a view of even numbers without copying them.
-    // 'views::transform' creates a view that squares each of those even numbers.
-    // The pipe operator | chains these operations together in a readable way.
+    // The pipe operator `|` is a key part of the std::ranges library. It allows you to
+    // chain "range adaptors" (like `views::filter` and `views::transform`) together
+    // to create a processing pipeline. Data flows from left to right.
+    //
+    // 1. `numbers` is the input range.
+    // 2. It's "piped" into `std::views::filter`, which creates a lazy view of only the even numbers.
+    // 3. The result of the filter is then "piped" into `std::views::transform`, which creates
+    //    another lazy view that contains the square of each number from the previous step.
+    //
+    // This approach is highly efficient because no intermediate containers are created.
+    // The operations are performed on-demand as you iterate over the final `result` view.
     auto result = numbers
                 | std::views::filter([](int n) { return n % 2 == 0; })
                 | std::views::transform([](int n) { return n * n; });
